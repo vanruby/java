@@ -74,6 +74,8 @@ Future Work
 - Bug: `Kernel` defines `Array`, `Complex`, `Float`, `Hash`, `Integer`,
   `Rational` and `String` which breaks `new String()` etc
 - Support more keywords: `static`, `final`, etc
+- Support `int i = 1` and `String str = "abc"`
+- Support `public String def returns_str; ...; end`
 
 
 Credits
