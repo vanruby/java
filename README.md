@@ -42,10 +42,6 @@ class MyClass
   public byte def not_byte()
     128
   end
-
-  private bool def this_is_private()
-    true
-  end
 end
 
 # >> obj = new MyClass("my class")
