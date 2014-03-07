@@ -81,6 +81,8 @@ Future Work
 Credits
 -------
 
+Java™ is a registered trademark of Oracle and/or its affiliates.
+
 [@tenderlove](https://github.com/tenderlove) and [@jeremy](https://github.com/jeremy)
 first brought this to my attention. [@amatsuda](https://github.com/amatsuda)
 also has a [similar gist](https://gist.github.com/amatsuda/6237320).
