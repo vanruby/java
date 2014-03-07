@@ -8,6 +8,8 @@ Install
 
 `gem install java` or add `gem 'java'` to your Gemfile.
 
+This gem requires Ruby 2.1.0+.
+
 Usage
 -----
 
