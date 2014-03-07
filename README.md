@@ -3,6 +3,11 @@ Java™
 
 The caffeine boost you need for your late-night coding sprints.
 
+Why
+---
+
+Because Enterprise™
+
 Install
 -------
 
