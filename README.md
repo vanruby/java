@@ -45,20 +45,22 @@ class MyClass
     128
   end
 end
+```
 
-# >> obj = new MyClass("my class")
-# => #<MyClass:0x000001018333d8 @name="my class">
-# >> obj.main()
-# This is the main method from my class
-# => nil
-# >> obj.returns_int()
-# => 1
-# >> obj.not_int()
-# TypeError: Expected not_int to return int but got "not int" instead
-# >> obj.returns_byte()
-# => 1
-# >> obj.not_byte()
-# TypeError: Expected not_byte to return byte but got 128 instead
+```irb
+>> obj = new MyClass("my class")
+=> #<MyClass:0x000001018333d8 @name="my class">
+>> obj.main()
+This is the main method from my class
+=> nil
+>> obj.returns_int()
+=> 1
+>> obj.not_int()
+TypeError: Expected not_int to return int but got "not int" instead
+>> obj.returns_byte()
+=> 1
+>> obj.not_byte()
+TypeError: Expected not_byte to return byte but got 128 instead
 ```
 
 Production Ready?
