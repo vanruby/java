@@ -38,42 +38,6 @@ class Module
       @__java__
     end
 
-    def void(meth)
-      define_typed_method(meth, :void, NilClass)
-    end
-
-    def byte(meth)
-      define_typed_method(meth, :byte, Integer) { |rtn| ::Java::BYTE === rtn }
-    end
-
-    def short(meth)
-      define_typed_method(meth, :short, Integer) { |rtn| ::Java::SHORT === rtn }
-    end
-
-    def int(meth)
-      define_typed_method(meth, :int, Integer) { |rtn| ::Java::INT === rtn }
-    end
-
-    def long(meth)
-      define_typed_method(meth, :long, Integer) { |rtn| ::Java::LONG === rtn }
-    end
-
-    def float(meth)
-      define_typed_method(meth, :float, Float)
-    end
-
-    def double(meth)
-      define_typed_method(meth, :double, Float)
-    end
-
-    def bool(meth)
-      define_typed_method(meth, :bool, Boolean)
-    end
-
-    def char(meth)
-      define_typed_method(meth, :char, String) { |rtn| rtn.length == 1 }
-    end
-
     def define_typed_method(meth, type, type_klass, &condition)
       __java__.send(:define_method, meth) do |*args, &block|
         ::Java.assert_return_type(meth, type, type_klass, super(*args, &block), &condition)
@@ -85,3 +49,24 @@ module Boolean; end
 
 TrueClass.send(:include, Boolean)
 FalseClass.send(:include, Boolean)
+
+module Type
+  def self.define_new(type, type_klass, &condition)
+    Module.class_eval do
+      define_method(type) do |meth|
+        define_typed_method(meth, type, type_klass, &condition)
+      end
+      private type
+    end
+  end
+end
+
+Type.define_new(:void, NilClass)
+Type.define_new(:byte, Integer) { |rtn| ::Java::BYTE === rtn }
+Type.define_new(:short, Integer) { |rtn| ::Java::SHORT === rtn }
+Type.define_new(:int, Integer) { |rtn| ::Java::INT === rtn }
+Type.define_new(:long, Integer) { |rtn| ::Java::LONG === rtn }
+Type.define_new(:float, Float)
+Type.define_new(:double, Float)
+Type.define_new(:bool, Boolean)
+Type.define_new(:char, String) { |rtn| rtn.length == 1 }
