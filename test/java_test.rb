@@ -86,7 +86,7 @@ class JavaTest < Minitest::Test
     Object.const_set 'UserType', Class.new
 
     user_type = new UserType()
-    define_type(:UserType, UserType)
+    Type.define_new(:UserType, UserType)
 
     assert_correct_type :UserType, user_type, "ObjectSpace._id2ref(#{user_type.__id__})"
     assert_wrong_type :UserType, 1

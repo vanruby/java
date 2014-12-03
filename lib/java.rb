@@ -24,15 +24,6 @@ module Kernel
     end
   end
 
-  def define_type(type, type_klass, &condition)
-    Module.class_eval do
-      define_method(type) do |meth|
-        define_typed_method(meth, type, type_klass, &condition)
-      end
-      private type
-    end
-  end
-
   def method_missing(meth, *args, &block)
     [Object.const_get(meth), args, block]
   rescue NameError
@@ -59,12 +50,23 @@ module Boolean; end
 TrueClass.send(:include, Boolean)
 FalseClass.send(:include, Boolean)
 
-define_type(:void, NilClass)
-define_type(:byte, Integer) { |rtn| ::Java::BYTE === rtn }
-define_type(:short, Integer) { |rtn| ::Java::SHORT === rtn }
-define_type(:int, Integer) { |rtn| ::Java::INT === rtn }
-define_type(:long, Integer) { |rtn| ::Java::LONG === rtn }
-define_type(:float, Float)
-define_type(:double, Float)
-define_type(:bool, Boolean)
-define_type(:char, String) { |rtn| rtn.length == 1 }
+module Type
+  def self.define_new(type, type_klass, &condition)
+    Module.class_eval do
+      define_method(type) do |meth|
+        define_typed_method(meth, type, type_klass, &condition)
+      end
+      private type
+    end
+  end
+end
+
+Type.define_new(:void, NilClass)
+Type.define_new(:byte, Integer) { |rtn| ::Java::BYTE === rtn }
+Type.define_new(:short, Integer) { |rtn| ::Java::SHORT === rtn }
+Type.define_new(:int, Integer) { |rtn| ::Java::INT === rtn }
+Type.define_new(:long, Integer) { |rtn| ::Java::LONG === rtn }
+Type.define_new(:float, Float)
+Type.define_new(:double, Float)
+Type.define_new(:bool, Boolean)
+Type.define_new(:char, String) { |rtn| rtn.length == 1 }
