@@ -3,6 +3,8 @@ class Type
 
   attr_accessor :sym, :klass, :condition
 
+  private_class_method :new
+
   def initialize(sym, klass, &condition)
     @sym, @klass, @condition = sym, klass, condition
     @@types << self
