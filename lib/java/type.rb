@@ -31,5 +31,9 @@ class Type
     def find_or_create(sym, klass, &condition)
       find(sym) || new(sym, klass, &condition)
     end
+
+    def types
+      @@types
+    end
   end
 end

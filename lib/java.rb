@@ -7,11 +7,19 @@ module Java
   INT   = -1<<31...1<<31
   LONG  = -1<<63...1<<63
 
-  def self.assert_return_type(meth, type, rtn)
-    if type.match?(rtn)
-      rtn
-    else
-      raise TypeError, "Expected #{meth} to return #{type.sym} but got #{rtn.inspect} instead"
+  class << self
+    def assert_return_type(meth, type, rtn)
+      if type.match?(rtn)
+        rtn
+      else
+        raise TypeError, "Expected #{meth} to return #{type.sym} but got #{rtn.inspect} instead"
+      end
+    end
+
+    def assert_args_type(meth, typed_args)
+      if unmatched_arg = typed_args.find { |typed_arg| !Type.find(typed_arg.keys.first).match?(typed_arg.values.first) }
+        raise ArgumentError, "Wrong type of argument, type of #{unmatched_arg.values.first} should be #{unmatched_arg.keys.first}"
+      end
     end
   end
 end
@@ -41,6 +49,12 @@ class Module
 
     def define_typed_method(meth, type)
       __java__.send(:define_method, meth) do |*args, &block|
+
+        typed_args = args.select do |arg|
+          arg.is_a?(Hash) && Type.types.map(&:sym).include?(arg.keys.first)
+        end
+
+        ::Java.assert_args_type(meth, typed_args) unless typed_args.empty?
         ::Java.assert_return_type(meth, type, super(*args, &block))
       end
     end
