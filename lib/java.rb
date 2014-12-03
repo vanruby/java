@@ -24,6 +24,15 @@ module Kernel
     end
   end
 
+  def define_type(type, type_klass, &condition)
+    Module.class_eval do
+      define_method(type) do |meth|
+        define_typed_method(meth, type, type_klass, &condition)
+      end
+      private type
+    end
+  end
+
   def method_missing(meth, *args, &block)
     [Object.const_get(meth), args, block]
   rescue NameError
