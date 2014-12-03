@@ -20,12 +20,12 @@ class Type
       end
     end
 
-    def find_type(sym)
+    def find(sym)
       @@types.find { |type| type.sym == sym }
     end
 
     def find_or_create(sym, klass, &condition)
-      find_type(sym) || new(sym, klass, &condition)
+      find(sym) || new(sym, klass, &condition)
     end
   end
 end
