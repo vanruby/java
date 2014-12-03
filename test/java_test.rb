@@ -82,6 +82,18 @@ class JavaTest < Minitest::Test
     assert_wrong_type :char, nil
   end
 
+  def test_user_type
+    Object.const_set 'UserType', Class.new
+
+    user_type = new UserType()
+    define_type(:UserType, UserType)
+
+    assert_correct_type :UserType, user_type, "ObjectSpace._id2ref(#{user_type.__id__})"
+    assert_wrong_type :UserType, 1
+    assert_wrong_type :UserType, "not UserType"
+    assert_wrong_type :UserType, nil
+  end
+
   private
     def define_test_method(type, val, raw_val = nil)
       klass = Class.new.class_eval <<-RUBY_CODE
