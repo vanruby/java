@@ -8,7 +8,7 @@ module Java
   LONG  = -1<<63...1<<63
 
   def self.assert_return_type(meth, type, rtn)
-    if (type.sym == :void || rtn != nil) && (type.klass === rtn) && (!type.condition || type.condition.(rtn))
+    if type.match?(rtn)
       rtn
     else
       raise TypeError, "Expected #{meth} to return #{type.sym} but got #{rtn.inspect} instead"
