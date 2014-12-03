@@ -10,6 +10,10 @@ class Type
     @@types << self
   end
 
+  def match?(val)
+    (@sym == :void || val != nil) && (@klass === val) && (!@condition || @condition.(val))
+  end
+
   class << self
     def define_new(sym, klass, &condition)
       Module.class_eval do
