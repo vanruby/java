@@ -6,11 +6,11 @@ module Java
   INT   = -1<<31...1<<31
   LONG  = -1<<63...1<<63
 
-  def self.assert_return_type(meth, type, type_klass = NilClass, rtn, &condition)
-    if (type == :void || rtn != nil) && (type_klass === rtn) && (!condition || condition.(rtn))
+  def self.assert_return_type(meth, type, rtn)
+    if (type.sym == :void || rtn != nil) && (type.klass === rtn) && (!type.condition || type.condition.(rtn))
       rtn
     else
-      raise TypeError, "Expected #{meth} to return #{type} but got #{rtn.inspect} instead"
+      raise TypeError, "Expected #{meth} to return #{type.sym} but got #{rtn.inspect} instead"
     end
   end
 end
@@ -38,9 +38,9 @@ class Module
       @__java__
     end
 
-    def define_typed_method(meth, type, type_klass, &condition)
+    def define_typed_method(meth, type)
       __java__.send(:define_method, meth) do |*args, &block|
-        ::Java.assert_return_type(meth, type, type_klass, super(*args, &block), &condition)
+        ::Java.assert_return_type(meth, type, super(*args, &block))
       end
     end
 end
@@ -50,13 +50,19 @@ module Boolean; end
 TrueClass.send(:include, Boolean)
 FalseClass.send(:include, Boolean)
 
-module Type
-  def self.define_new(type, type_klass, &condition)
+class Type
+  attr_accessor :sym, :klass, :condition
+
+  def initialize(sym, klass, &condition)
+    @sym, @klass, @condition = sym, klass, condition
+  end
+
+  def self.define_new(sym, klass, &condition)
     Module.class_eval do
-      define_method(type) do |meth|
-        define_typed_method(meth, type, type_klass, &condition)
+      define_method(sym) do |meth|
+        define_typed_method(meth, Type.new(sym, klass, &condition))
       end
-      private type
+      private sym
     end
   end
 end
