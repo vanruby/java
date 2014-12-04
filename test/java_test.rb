@@ -96,10 +96,10 @@ class JavaTest < Minitest::Test
 
   private
     def define_test_method(type, val)
-      klass = Class.new.class_eval <<-RUBY_CODE
-        public #{type} def call
+      klass = Class.new.extend(JavaClass).class_eval <<-RUBY_CODE
+        public #{type} call(){"
           ObjectSpace._id2ref(#{val.__id__})
-        end
+        "}
       RUBY_CODE
 
       klass.new
