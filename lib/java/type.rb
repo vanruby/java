@@ -16,9 +16,10 @@ class Type
 
   class << self
     def define_new(sym, klass, &condition)
+      type = find_or_create(sym, klass, &condition)
       Module.class_eval do
         define_method(sym) do |meth|
-          define_typed_method(meth, Type.find_or_create(sym, klass, &condition))
+          define_typed_method(meth, type)
         end
         private sym
       end
@@ -30,6 +31,10 @@ class Type
 
     def find_or_create(sym, klass, &condition)
       find(sym) || new(sym, klass, &condition)
+    end
+
+    def types
+      @@types
     end
   end
 end
